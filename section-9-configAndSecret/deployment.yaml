@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: store-app
+spec:
+ replicas: 3
+ selector:
+  matchLabels:
+   app: store-app
+ template:
+  metadata:
+   labels:
+    app: store-app
+  spec:
+   containers:
+    - name: store-container
+      image: my-nest-app:v4
+      env:
+       - name: DATABASE_URL
+         valueFrom:
+          secretKeyRef:
+           name: database-secret
+           key: DATABASE_URL
+       - name: MAX_CONNECTIONS
+         valueFrom:
+          configMapKeyRef:
+           name: database-config
+           key: MAX_CONNECTIONS
+      ports:
+       - containerPort: 3000
+      volumeMounts:
+       - name: database-config
+         mountPath: /app/.env
+         readOnly: true
+      resources:
+       requests:
+        cpu: 100m
+        memory: 128Mi
+       limits:
+        cpu: 500m
+        memory: 512Mi
+   volumes:
+    - name: database-config
+      configMap:
+       name: database-config

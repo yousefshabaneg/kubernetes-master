@@ -1,0 +1,14 @@
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+ name: my-endpoint-slice
+ labels:
+  kubernetes.io/service-name: fisa3-service
+addressType: IPv4
+ports:
+ - name: fisa3
+   protocol: TCP
+   port: 80
+endpoints:
+ - addresses:
+    - "155.138.133.242"

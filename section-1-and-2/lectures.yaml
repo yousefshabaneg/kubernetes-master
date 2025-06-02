@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Pod
+metadata:
+ name: web
+spec:
+ containers:
+  - image: nginx
+    name: web
+    resources:
+     limits:
+      cpu: "100m"
+      memory: "256Mi"
+     requests:
+      cpu: "100m"
+      memory: "128Mi"
+    ports:
+     - containerPort: 80
+       name: http
+       protocol: TCP
+# for wsl can't see running pods:
+# wsl2: echo ‘export KUBECONFIG=”/mnt/c/Users/youse/.kube/config”’ >> ~/.bashrc
+
+# kubectl run web --image=nginx // Imperative
+# kubectl apply -f pod.yaml // Declarative
+
+# kubectl delete pods web
+
+# kubectl get pods -o wide  // get info about pods
+# kubectl describe pods web // get more info about pods
+
+# kubectl logs web // get logs of a pod
+# kubectl logs -f web // get live logs of a pod
+
+# kubectl exec -it web
+# kubectl exec -it demo -c main-container -- sh
+# kubectl logs -f demo -c sidecar-container
+
+# kubectl run ubuntu --image=ubuntu -it --rm -- /bin/bash
+
+# ### ### Ingress
+# For testing purposes, we will simply setup port-forwarding
+# If you are running in the cloud, you will get a real IP address.
+# kubectl -n ingress-nginx port-forward svc/ingress-nginx-controller 443
+
+# Creating tls certificates for ingress
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -subj "/CN=example.com/O=example.com"
+
+# kubectl port-forward svc/myapp-service 3000:3000
+# kubectl port-forward pod/store-app-76d554fdc6-rs8t4 3000:3000
